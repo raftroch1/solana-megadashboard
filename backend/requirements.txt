@@ -1,0 +1,35 @@
+# FastAPI and Server
+fastapi>=0.103.1
+uvicorn[standard]>=0.23.2
+pydantic>=2.4.2
+pydantic-settings>=2.0.0
+
+# Database and Caching
+supabase>=2.9.1
+redis>=5.0.0
+
+# Authentication and Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+
+# AI and Analytics
+crewai>=0.76.2
+openai>=1.13.3
+
+# Utilities
+python-dotenv>=1.0.0
+httpx>=0.26.0
+aiohttp>=3.8.5
+tenacity>=8.2.3
+
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+httpx>=0.26.0
+
+# Monitoring and Logging
+sentry-sdk>=1.39.1
+
+# Payment Processing
+stripe>=7.0.0
