@@ -103,3 +103,305 @@ Quick Start Commands (After Initial Setup):
    ```bash
    cd solana-analytics/frontend
    npm run dev
+
+
+Solana Analytics SaaS Platform Technical Specification
+Create a full-stack Solana analytics platform with AI-powered insights using the following technologies and specifications:
+Tech Stack
+
+Frontend: Next.js 14 (App Router) with TailwindCSS + shadcn/ui
+Backend: FastAPI
+Database: Supabase
+Caching: Redis
+AI Agents: CrewAI
+Deployment: DigitalOcean App Platform
+Authentication: Supabase Auth
+Payment Processing: Stripe
+
+Frontend Implementation
+1. Authentication & User Management
+
+Implement login/signup flow with:
+
+Email/password
+Web3 wallet connection (Phantom)
+Google OAuth
+
+
+User profile management
+Subscription management page
+Admin dashboard for platform management
+
+2. Main Dashboard Features
+Create a modern dashboard with the following components:
+Header Section
+
+Platform logo/name
+Navigation menu
+User profile dropdown
+Real-time network status indicator
+Current SOL price ticker
+
+Main Analytics View
+
+Implement a card-based layout with:
+
+Wallet tracking cards
+Volume analysis
+Token movement heatmap
+Price action indicators
+
+
+Use shadcn/ui components for consistency
+Implement dark/light mode toggle
+
+Monitoring Interface
+
+Create a real-time transaction monitor with:
+
+Filterable transaction list
+Whale movement alerts
+Custom alert configuration
+Alert history
+
+
+
+Agent Insights Panel
+
+Display AI agent findings in a dedicated section:
+
+Trend predictions
+Wallet analysis
+Volume anomalies
+Risk assessments
+
+
+Add ability to track specific wallets/tokens
+
+3. Settings & Configuration
+
+Alert preferences
+Email notification settings
+Telegram/Discord integration options
+API key management
+Subscription plan management
+
+Backend Implementation
+1. FastAPI Server Structure
+app/
+├── agents/
+│   ├── volume_analyzer.py
+│   ├── whale_tracker.py
+│   ├── pattern_detector.py
+│   └── risk_analyzer.py
+├── api/
+│   ├── routes/
+│   └── endpoints/
+├── core/
+│   ├── config.py
+│   └── security.py
+├── models/
+└── services/
+
+2. AI Agent System
+Implement four CrewAI agents:
+Volume Analyzer Agent
+
+Monitor trading volume across DEXs
+Detect unusual volume patterns
+Analyze liquidity changes
+Track volume-to-market-cap ratios
+
+Whale Tracker Agent
+
+Monitor large wallet movements
+Track smart money wallets
+Detect accumulation patterns
+Analyze wallet networks
+
+Pattern Detector Agent
+
+Identify market patterns
+Analyze token distribution
+Monitor social sentiment
+Track developer activity
+
+Risk Analyzer Agent
+
+Assess token contract risks
+Monitor rugpull indicators
+Analyze token distribution
+Track insider trading patterns
+
+3. Data Processing Pipeline
+
+Implement real-time Solana blockchain indexing
+Set up WebSocket connections for live updates
+Create data aggregation services
+Implement caching strategy with Redis
+
+Database Schema (Supabase)
+-- Users table
+create table users (
+  id uuid references auth.users primary key,
+  email text unique,
+  wallet_address text,
+  subscription_tier text,
+  subscription_status text,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Tracked wallets table
+create table tracked_wallets (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references users(id),
+  wallet_address text,
+  label text,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Alerts table
+create table alerts (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references users(id),
+  type text,
+  conditions jsonb,
+  is_active boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Agent findings table
+create table agent_findings (
+  id uuid primary key default uuid_generate_v4(),
+  agent_type text,
+  finding_type text,
+  data jsonb,
+  confidence_score float,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Users table
+create table users (
+  id uuid references auth.users primary key,
+  email text unique,
+  wallet_address text,
+  subscription_tier text,
+  subscription_status text,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Tracked wallets table
+create table tracked_wallets (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references users(id),
+  wallet_address text,
+  label text,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Alerts table
+create table alerts (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references users(id),
+  type text,
+  conditions jsonb,
+  is_active boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Agent findings table
+create table agent_findings (
+  id uuid primary key default uuid_generate_v4(),
+  agent_type text,
+  finding_type text,
+  data jsonb,
+  confidence_score float,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+SaaS Features Implementation
+1. Subscription Tiers
+Implement three subscription tiers:
+
+Free Tier:
+
+Basic wallet tracking
+Limited historical data
+Basic alerts
+
+
+Pro Tier:
+
+Advanced analytics
+More wallet tracking
+Custom alerts
+API access
+
+
+Enterprise Tier:
+
+Unlimited tracking
+Custom agent deployment
+Priority support
+Team access
+
+
+
+2. Billing System
+
+Integrate Stripe for payment processing
+Implement usage-based billing
+Set up subscription management
+Handle payment webhooks
+
+3. API Access
+
+Create REST API endpoints
+Implement API key authentication
+Set up rate limiting
+Create API documentation
+
+Deployment Configuration
+1. DigitalOcean Setup
+
+Configure App Platform for frontend
+Set up managed PostgreSQL (Supabase)
+Configure managed Redis
+Set up container registry
+
+2. CI/CD Pipeline
+name: Deploy to DigitalOcean
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+      - name: Build container
+        run: docker build -t registry.digitalocean.com/solana-analytics/app:$(echo $GITHUB_SHA | head -c7) .
+      - name: Push container
+        run: docker push registry.digitalocean.com/solana-analytics/app:$(echo $GITHUB_SHA | head -c7)
+        3. Monitoring & Scaling
+
+Set up application monitoring
+Configure auto-scaling rules
+Implement error tracking
+Set up backup strategy
+
+Security Considerations
+
+Implement rate limiting
+Set up WAF rules
+Configure CORS policies
+Implement input validation
+Set up audit logging
+
+Testing Strategy
+
+Unit tests for agents
+Integration tests for API
+E2E tests for frontend
+Load testing for scaling
