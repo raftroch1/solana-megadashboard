@@ -3,6 +3,7 @@ import logging
 from .volume_analyzer import VolumeAnalyzer
 from .whale_tracker import WhaleTracker
 from crewai import Crew
+from app.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +12,7 @@ class AgentManager:
         self.volume_analyzer = VolumeAnalyzer()
         self.whale_tracker = WhaleTracker()
         
+    @cache.cached("analysis:volume", expire=300)  # Cache for 5 minutes
     async def run_volume_analysis(self) -> Dict:
         """Run comprehensive volume analysis"""
         try:
@@ -33,6 +35,7 @@ class AgentManager:
             logger.error(f"Error in volume analysis workflow: {str(e)}")
             return None
             
+    @cache.cached("analysis:whales", expire=300)  # Cache for 5 minutes
     async def run_whale_tracking(self, wallet_address: str = None) -> Dict:
         """Run whale tracking analysis"""
         try:
