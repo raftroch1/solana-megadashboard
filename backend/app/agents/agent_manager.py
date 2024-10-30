@@ -1,124 +1,57 @@
-from crewai import Crew
 from typing import Dict, List
 import logging
-from .volume_analyzer import VolumeAnalyzerAgent
-from .whale_tracker import WhaleTrackerAgent
-from .pattern_detector import PatternDetectorAgent
-from .risk_analyzer import RiskAnalyzerAgent
+from .volume_analyzer import VolumeAnalyzer
+from .whale_tracker import WhaleTracker
+from crewai import Crew
 
 logger = logging.getLogger(__name__)
 
 class AgentManager:
     def __init__(self):
-        """Initialize all AI agents and create the crew"""
-        self.volume_analyzer = VolumeAnalyzerAgent()
-        self.whale_tracker = WhaleTrackerAgent()
-        self.pattern_detector = PatternDetectorAgent()
-        self.risk_analyzer = RiskAnalyzerAgent()
+        self.volume_analyzer = VolumeAnalyzer()
+        self.whale_tracker = WhaleTracker()
         
-        self.crew = Crew(
-            agents=[
-                self.volume_analyzer.agent,
-                self.whale_tracker.agent,
-                self.pattern_detector.agent,
-                self.risk_analyzer.agent
-            ],
-            tasks=[],  # Tasks will be added dynamically based on analysis needs
-            verbose=True
-        )
-
-    async def analyze_token(self, token_address: str) -> Dict:
-        """
-        Perform comprehensive token analysis using all agents
-        
-        Args:
-            token_address: The Solana token address to analyze
-            
-        Returns:
-            Dict containing comprehensive analysis from all agents
-        """
+    async def run_volume_analysis(self) -> Dict:
+        """Run comprehensive volume analysis"""
         try:
-            # Gather analysis from each agent
-            volume_analysis = await self.volume_analyzer.analyze_volume_patterns(token_address)
-            whale_analysis = await self.whale_tracker.detect_accumulation_patterns(token_address)
-            pattern_analysis = await self.pattern_detector.identify_market_patterns(token_address)
-            risk_analysis = await self.risk_analyzer.assess_contract_risks(token_address)
+            # Sample data structure - to be replaced with real data
+            dex_data = {}
+            pool_data = {}
+            token_data = {}
+            
+            volume_patterns = await self.volume_analyzer.analyze_volume_patterns(dex_data)
+            liquidity_changes = await self.volume_analyzer.track_liquidity_changes(pool_data)
+            volume_metrics = await self.volume_analyzer.calculate_volume_metrics(token_data)
             
             return {
-                "token_address": token_address,
-                "volume_analysis": volume_analysis,
-                "whale_analysis": whale_analysis,
-                "pattern_analysis": pattern_analysis,
-                "risk_analysis": risk_analysis,
-                "overall_score": self._calculate_overall_score(
-                    volume_analysis,
-                    whale_analysis,
-                    pattern_analysis,
-                    risk_analysis
-                )
+                "volume_patterns": volume_patterns,
+                "liquidity_changes": liquidity_changes,
+                "volume_metrics": volume_metrics
             }
-        except Exception as e:
-            logger.error(f"Error performing comprehensive token analysis: {str(e)}")
-            raise
-
-    async def monitor_wallet(self, wallet_address: str) -> Dict:
-        """
-        Monitor and analyze wallet activity
-        
-        Args:
-            wallet_address: The Solana wallet address to monitor
             
-        Returns:
-            Dict containing wallet analysis from relevant agents
-        """
+        except Exception as e:
+            logger.error(f"Error in volume analysis workflow: {str(e)}")
+            return None
+            
+    async def run_whale_tracking(self, wallet_address: str = None) -> Dict:
+        """Run whale tracking analysis"""
         try:
-            # Analyze wallet using relevant agents
-            network_analysis = await self.whale_tracker.analyze_wallet_networks(wallet_address)
-            risk_assessment = await self.risk_analyzer.analyze_token_distribution_risk(wallet_address)
+            large_movements = await self.whale_tracker.monitor_large_movements()
+            
+            if wallet_address:
+                network_analysis = await self.whale_tracker.analyze_wallet_network(wallet_address)
+                accumulation_data = await self.whale_tracker.detect_accumulation(wallet_address)
+                
+                return {
+                    "large_movements": large_movements,
+                    "network_analysis": network_analysis,
+                    "accumulation_data": accumulation_data
+                }
             
             return {
-                "wallet_address": wallet_address,
-                "network_analysis": network_analysis,
-                "risk_assessment": risk_assessment,
-                "is_whale": network_analysis.get("risk_score", 0) > 0.7
+                "large_movements": large_movements
             }
-        except Exception as e:
-            logger.error(f"Error monitoring wallet: {str(e)}")
-            raise
-
-    async def get_market_insights(self) -> Dict:
-        """
-        Get general market insights and trends
-        
-        Returns:
-            Dict containing market insights from all agents
-        """
-        try:
-            # Gather insights from each agent
-            volume_anomalies = await self.volume_analyzer.detect_volume_anomalies()
-            whale_movements = await self.whale_tracker.track_large_movements()
             
-            return {
-                "volume_anomalies": volume_anomalies,
-                "whale_movements": whale_movements,
-                "timestamp": "now",  # TODO: Add proper timestamp
-                "market_status": "normal"  # TODO: Implement market status detection
-            }
         except Exception as e:
-            logger.error(f"Error getting market insights: {str(e)}")
-            raise
-
-    def _calculate_overall_score(self, volume_analysis: Dict, whale_analysis: Dict,
-                               pattern_analysis: Dict, risk_analysis: Dict) -> float:
-        """
-        Calculate overall score based on individual analyses
-        
-        Returns:
-            Float representing overall score (0-1)
-        """
-        try:
-            # TODO: Implement proper scoring algorithm
-            return 0.5
-        except Exception as e:
-            logger.error(f"Error calculating overall score: {str(e)}")
-            return 0.0
+            logger.error(f"Error in whale tracking workflow: {str(e)}")
+            return None

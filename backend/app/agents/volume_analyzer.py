@@ -4,75 +4,64 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class VolumeAnalyzerAgent:
+class VolumeAnalyzer:
     def __init__(self):
         self.agent = Agent(
-            role='Volume Analysis Specialist',
+            role='Volume Analysis Expert',
             goal='Monitor and analyze trading volumes across Solana DEXs',
-            backstory="""You are an expert in analyzing trading volumes and market dynamics
-            on Solana. Your analysis helps identify significant market movements and trends.""",
-            allow_delegation=False
+            backstory="""You are an expert in analyzing trading volumes and market dynamics 
+            on Solana's decentralized exchanges. Your expertise helps identify unusual patterns 
+            and potential market movements."""
         )
         
-    async def analyze_volume_patterns(self, token_address: str) -> Dict:
-        """
-        Analyze trading volume patterns for a specific token
-        
-        Args:
-            token_address: The Solana token address to analyze
-            
-        Returns:
-            Dict containing volume analysis results
-        """
+    async def analyze_volume_patterns(self, dex_data: Dict) -> Dict:
+        """Analyze trading volume patterns across DEXs"""
         try:
-            # TODO: Implement actual volume analysis logic
-            return {
-                "token_address": token_address,
-                "volume_24h": 0,
-                "volume_change": 0,
-                "liquidity_depth": 0,
+            # TODO: Implement actual DEX data fetching
+            analysis_result = {
                 "unusual_patterns": [],
-                "risk_level": "low"
+                "liquidity_changes": [],
+                "volume_metrics": {
+                    "24h_volume": 0,
+                    "volume_change": 0,
+                    "volume_to_mcap": 0
+                }
             }
-        except Exception as e:
-            logger.error(f"Error analyzing volume patterns: {str(e)}")
-            raise
-
-    async def detect_volume_anomalies(self, threshold: float = 2.0) -> List[Dict]:
-        """
-        Detect unusual volume movements across all tracked tokens
-        
-        Args:
-            threshold: The standard deviation threshold for anomaly detection
             
-        Returns:
-            List of tokens with anomalous volume
-        """
-        try:
-            # TODO: Implement anomaly detection logic
-            return []
-        except Exception as e:
-            logger.error(f"Error detecting volume anomalies: {str(e)}")
-            raise
-
-    async def analyze_liquidity_changes(self, token_address: str) -> Dict:
-        """
-        Analyze liquidity changes for a specific token
-        
-        Args:
-            token_address: The Solana token address to analyze
+            return analysis_result
             
-        Returns:
-            Dict containing liquidity analysis
-        """
+        except Exception as e:
+            logger.error(f"Error in volume analysis: {str(e)}")
+            return None
+            
+    async def track_liquidity_changes(self, pool_data: Dict) -> Dict:
+        """Track and analyze liquidity changes in DEX pools"""
         try:
-            # TODO: Implement liquidity analysis logic
-            return {
-                "token_address": token_address,
-                "liquidity_change_24h": 0,
-                "major_moves": [],
-                "risk_assessment": "stable"
+            # TODO: Implement liquidity pool monitoring
+            liquidity_analysis = {
+                "significant_changes": [],
+                "pool_health": "stable",
+                "recommendations": []
             }
+            
+            return liquidity_analysis
+            
         except Exception as e:
-            logger.error(f"Error analyzing liquidity changes: {str(e)}")
-            raise
+            logger.error(f"Error in liquidity analysis: {str(e)}")
+            return None
+            
+    async def calculate_volume_metrics(self, token_data: Dict) -> Dict:
+        """Calculate various volume-related metrics"""
+        try:
+            # TODO: Implement volume metrics calculation
+            metrics = {
+                "volume_to_mcap_ratio": 0,
+                "volume_concentration": 0,
+                "volume_trend": "stable"
+            }
+            
+            return metrics
+            
+        except Exception as e:
+            logger.error(f"Error calculating volume metrics: {str(e)}")
+            return None
