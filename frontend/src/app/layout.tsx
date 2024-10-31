@@ -1,14 +1,11 @@
-import type { Metadata } from "next"
+"use client"
+
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { Header } from "@/components/layout/header"
+import { SolanaWalletProvider } from "@/providers/WalletProvider"
+import { Toaster } from "sonner"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
-
-export const metadata: Metadata = {
-  title: "Solana Analytics Platform",
-  description: "AI-powered analytics for Solana blockchain",
-}
+const inter = Inter({ subsets: ["latin"] })
 
 export default function RootLayout({
   children,
@@ -18,10 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
-        <div className="min-h-screen bg-background">
-          <Header />
+        <SolanaWalletProvider>
           {children}
-        </div>
+        </SolanaWalletProvider>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   )
