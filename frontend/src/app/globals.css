@@ -29,3 +29,13 @@ body {
 .wallet-adapter-modal-wrapper {
   background-color: theme('colors.gray.900') !important;
 }
+
+/* Custom radial gradient for corner fades */
+.bg-radial-gradient {
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+}
